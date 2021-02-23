@@ -1,0 +1,91 @@
+<html>
+<head>
+<style>
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+th {
+  background-color: #4CAF50;
+  color: white;
+}
+</style>
+<title>Church App</title>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,user-	scalable=no">
+
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css">
+	<script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+	<script type="text/javascript" language="javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+$(document).ready(function(){
+  $.getJSON("https://arthurfrost.qflo.co.za/php/getTimeline.php", function(result){
+    var about_us = "";
+    var timeline_data = [];
+
+    //load the about section	  
+    $.each(result['Body'], function(key, value){
+      //now load the key
+	    about_us = "<div id='about-us'>"+value['About']+"</div>";
+    });
+
+    $('#about-us').replaceWith(about_us);
+    //now load the timeline
+    $.each(result['Timeline'], function(key, value){
+        console.log(value);
+	timeline_data.push([value.Audio, value.AudioSize, value.Category, value.CreateDate, value.Description, value.Episode, value.Epoch, value.Icon, value.Id, value.Image, value.Media, value.MediaName, value.RemoteId, value.Status, value.Title, value.inId, value.isActive]);
+    });
+    console.log("Timeline", timeline_data);
+    console.log("Timeline Length", timeline_data.length);
+    //after loading the timeline_data 
+
+    $('#medialist_table').DataTable({
+    	data: timeline_data,
+    	columns:[    
+    	{title: "Audio"},
+    	{title: "AudioSize"},
+    	{title: "Category"},
+    	{title: "CreateDate"},
+    	{title: "Description"},
+    	{title: "Episode"},
+    	{title: "Epoch"},
+    	{title: "Icon"},
+    	{title: "Id"},
+    	{title: "Image"},
+    	{title: "Media"},
+    	{title: "MediaName"},
+    	{title: "RemoteId"},
+    	{title: "Status"},
+	{title: "Title"},
+	{title: "inId"},	
+	{title: "isActive"},
+    	]
+    });    
+  });
+})
+</script>
+</head>
+
+<body style="background-color:powderblue;">
+<h1>Our Church App</h1>
+<div id="about-us"></div>
+<div>
+    <h1>Media Timeline</h1>    
+    <div class="table-responsive">
+    <table class="display" style="width:100%"" id="medialist_table">
+    </table>
+    </div>
+</div>
+</body>
+
+
+</html>
